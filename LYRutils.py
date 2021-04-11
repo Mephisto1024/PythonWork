@@ -11,7 +11,7 @@ import json
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-import tkinter as tk
+from tkinter import *
 import tkinter.filedialog
 from PIL import Image, ImageTk
 
@@ -20,9 +20,9 @@ from PIL import Image, ImageTk
 class beautify():
     
     def openimg(self):
-        img_name = 'test_1.png'
+        img_name = 'test_2.png'
         f = open(img_name, 'rb')
-        # 转 base64
+        # change into base64
         img_base64 = base64.b64encode(f.read())
         
         return img_base64
@@ -32,27 +32,27 @@ class beautify():
     def gethtml(self,img_base64):
         
         beautify_url = "https://api-cn.faceplusplus.com/facepp/v2/beautify"
-        # 你创建的应用的 API Key 和 API Secret(也叫 Secret Key)
+        # API key and API secret (also called secret key) of the application you create
         AK = 'ymsWTOvoWbh1UJ9z9WNs2tF_XxlvsWtS'
         SK = 'JgSoZxCLllFdRFETv9zHLvtkmHjOr2A8'
         
-        # 可选参数，不填写，默认50
-        # 美白程度 0 - 100
+        # Optional parameter. If it is not filled in, the default value is 50
+        # Whitening degree 0 - 100
         whitening = 80
-        # 磨皮程度 0 - 100
+        # Degree of skin grinding 0 - 100
         smoothing = 80
-        # 瘦脸程度 0 - 100
+        # The degree of thin face 0 - 100
         thinface = 100
-        # 小脸程度 0 - 100
+        # Degree of small face 0 - 100
         shrink_face = 50
-        # 大眼程度 0 - 100
+        # Macrophthalmia degree 0 - 100
         enlarge_eye = 50
-        # 去眉毛程度 0 - 100
+        # Degree of eyebrow removal 0 - 100
         remove_eyebrow = 50
-        # 滤镜名称，不填写，默认无滤镜
+        # Filter name. If it is not filled in, there is no filter by default
         filter_type = ''
         
-        # 使用 whitening、smoothing、thinface 三个可选参数，其他用默认值
+        # use whitening、smoothing、thinface three optional parameters, others with default values
         data = {
             'api_key': AK,
             'api_secret': SK,
@@ -60,6 +60,10 @@ class beautify():
             'whitening': whitening,
             'smoothing': smoothing,
             'thinface': thinface,
+            'shrink_face':shrink_face,
+            'enlarge_eye':enlarge_eye,
+            'remove_eyebrow':remove_eyebrow,
+            'filter_type':filter_type,
             }
  
         r = requests.post(url=beautify_url, data=data)
@@ -70,7 +74,7 @@ class beautify():
         
         
     def analysisbase64(self,html):
-        # 解析base64图片
+        # Analysis of Base64 pictures
         base64_data = html['result']
         imgData = base64.b64decode(base64_data)
         nparr = np.frombuffer(imgData, np.uint8)
@@ -82,28 +86,16 @@ class beautify():
         
         
     def Originalimg(self,img_name):
-        # 原始图片
+        # Original picture
         img = cv2.imread(img_name)
         img_BGR = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         
         return img_BGR
-    
-            
 
-
-class tkinter_():
-    
-    def show(self,window,img_BGR):
-        img = ImageTk.PhotoImage(img_BGR)
-        label_show = Tkinter.Label(window,image = img)
-        label_show.pack()
-    
-    def showres(self,window,img_res_BGR):
-        imgres = ImageTk.PhotoImage(img_res_BGR)
-        label_showres = Tkinter.Label(window,image = imgres)
-        label_showres.pack()
-    
-
-
+    def showimg(self,img_BGR,img_res_BGR):
+        fig, axs = plt.subplots(nrows=1, ncols=2, sharex=False, sharey=False, figsize=(10,10))
+        axs[0].imshow(img_BGR)
+        axs[1].imshow(img_res_BGR)
+        plt.show()
 
 
