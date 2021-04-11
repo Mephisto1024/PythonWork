@@ -11,7 +11,7 @@ import json
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from tkinter import *
+import tkinter as tk
 import tkinter.filedialog
 from PIL import Image, ImageTk
 
@@ -89,10 +89,20 @@ class beautify():
         return img_BGR
     
             
-    
-    
 
 
+class tkinter_():
+    
+    def show(self,window,img_BGR):
+        img = ImageTk.PhotoImage(img_BGR)
+        label_show = Tkinter.Label(window,image = img)
+        label_show.pack()
+    
+    def showres(self,window,img_res_BGR):
+        imgres = ImageTk.PhotoImage(img_res_BGR)
+        label_showres = Tkinter.Label(window,image = imgres)
+        label_showres.pack()
+    
 
 
 
